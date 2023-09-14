@@ -3,6 +3,7 @@ import { Contacts, ContactsItem, Name, Number, Btn } from './ContactList.styled'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact, selectContacts, selectFilter } from '../redux/slice';
 
+
 const getVisibleContacts = (contacts, filter) => {
   return contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -34,4 +35,3 @@ export const ContactList = () => {
     </Contacts>
   );
 };
-

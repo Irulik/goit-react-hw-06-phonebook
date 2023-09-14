@@ -1,19 +1,29 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormName, FormNumber, FormButton } from "./ContactForm.styled";
 import { addContact } from '../redux/slice';
 import { nanoid } from 'nanoid';
+import { selectContacts } from '../redux/slice';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
+  const contacts = useSelector(selectContacts);
+
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(addContact({ id: nanoid(), name, number }));
-    setName('');
-    setNumber('');
+
+    const isUnique = contacts.find(contact => contact.number === number);
+
+    if (isUnique) {
+      alert('Цей номер вже існує в телефонній книзі.');
+    } else {
+      dispatch(addContact({ id: nanoid(), name, number }));
+      setName('');
+      setNumber('');
+    }
   };
 
   return (
@@ -36,7 +46,7 @@ export const ContactForm = () => {
           type="tel"
           name="number"
           value={number}
-          onChange={e => setNumber(e.target.value)}  
+          onChange={e => setNumber(e.target.value)}
           pattern="[+]?[0-9-()\\s]+"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
